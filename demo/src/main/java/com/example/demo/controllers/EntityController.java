@@ -34,12 +34,12 @@ public class EntityController {
     }
 
     // Obtenir un Stage par son ID
-    @GetMapping("/stages/{id}")
+   /* @GetMapping("/stages/{id}")
     public ResponseEntity<Stage> getStageById(@PathVariable Long id) {
         Optional<Stage> stage = stageRepository.findById(id);
         return stage.map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
-    }
+    } */
 
     // Créer un Student (avec GET pour utiliser l'URL)
     @GetMapping("/students/create")

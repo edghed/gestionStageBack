@@ -1,6 +1,5 @@
 package com.example.demo.entities;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,22 +7,25 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Student {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String firstName;
     private String lastName;
+    private String email;  // Nouveau champ email ajouté
 
+    // Constructeurs
+    public Student() { }
 
-    public Student() {
-        
-    }
-
-    public Student(String firstName, String lastName) {
+    public Student(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
     }
 
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -47,5 +49,12 @@ public class Student {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-}
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}

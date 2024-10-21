@@ -14,35 +14,21 @@ public class Stage {
     private Long id;
     private String title;
     private String description;
-    Date dateDebut;
-    Date dateFin;
-
-   
+    private Date dateDebut;
+    private Date dateFin;
 
     public Stage() {}
 
-    public Stage(String title, String description) {
+    public Stage(String title, String description, Date dateDebut, Date dateFin) {
         this.title = title;
         this.description = description;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
     }
 
     public Long getId() {
         return id;
     }
-public Date getDateDebut()
-{return dateDebut;}
-
-public void setDateDebut(Date dateDebut)
-{this.dateDebut=dateDebut;}
-
-public Date getDateFin(){
-    return dateFin;
-}
-
-public void setDateFin(Date dateFin){
-    this.dateFin=dateFin;
-}
-
 
     public void setId(Long id) {
         this.id = id;
@@ -62,5 +48,21 @@ public void setDateFin(Date dateFin){
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public Date getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
     }
 }
