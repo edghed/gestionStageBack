@@ -13,60 +13,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Repositories.StageRepository;
 import com.example.demo.entities.Stage;
+import com.example.demo.services.StageService;
 
 @RestController
 @RequestMapping("/stages")
 public class StageController {
 
     @Autowired
-    private StageRepository stageRepository;
+    private StageService stageService;
 
-    // Récupérer tous les stages
     @GetMapping
     public List<Stage> getAllStages() {
-        return stageRepository.findAll();
+        return stageService.getAllStages();
     }
 
-    // Ajouter un nouveau stage
     @PostMapping
     public Stage createStage(@RequestBody Stage stage) {
-        return stageRepository.save(stage);
+        return stageService.saveStage(stage);
     }
 
-    // Récupérer un stage par ID
     @GetMapping("/{id}")
     public ResponseEntity<Stage> getStageById(@PathVariable Long id) {
-        return stageRepository.findById(id)
-            .map(stage -> ResponseEntity.ok(stage))
+        return stageService.getStageById(id)
+            .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // Mettre à jour un stage
     @PutMapping("/{id}")
     public ResponseEntity<Stage> updateStage(@PathVariable Long id, @RequestBody Stage updatedStage) {
-        return stageRepository.findById(id)
-            .map(existingStage -> {
-                existingStage.setTitle(updatedStage.getTitle());
-                existingStage.setDescription(updatedStage.getDescription());
-                existingStage.setDateDebut(updatedStage.getDateDebut());
-                existingStage.setDateFin(updatedStage.getDateFin());
-                Stage savedStage = stageRepository.save(existingStage);
-                return ResponseEntity.ok(savedStage);
-            })
+        return stageService.updateStage(id, updatedStage)
+            .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // Supprimer un stage
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStage(@PathVariable Long id) {
-        return stageRepository.findById(id)
-            .map(stage -> {
-                stageRepository.delete(stage);
-                return ResponseEntity.ok().<Void>build();  // Ici, nous utilisons ResponseEntity<Void>
-            })
-            .orElse(ResponseEntity.notFound().build());
+        boolean deleted = stageService.deleteStage(id);
+        return deleted ? ResponseEntity.ok().<Void>build() : ResponseEntity.notFound().build();
     }
-    
 }
