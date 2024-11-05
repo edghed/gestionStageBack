@@ -1,3 +1,4 @@
+// src/main/java/com/example/demo/entities/Student.java
 package com.example.demo.entities;
 
 import jakarta.persistence.Entity;
@@ -11,18 +12,19 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String firstName;
     private String lastName;
-    private String email;  // Nouveau champ email ajouté
+    private String email;
+    private String password; // Ajout du mot de passe
 
     // Constructeurs
     public Student() { }
 
-    public Student(String firstName, String lastName, String email) {
+    public Student(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
     }
 
     // Getters et Setters
@@ -56,5 +58,13 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

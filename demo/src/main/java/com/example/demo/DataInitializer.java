@@ -24,8 +24,8 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
        
-        studentRepository.save(new Student("John", "Doe", "jhondoe@gmail.com"));
-        studentRepository.save(new Student("Jane", "Smith", "janesmith@gmail.com"));
+        studentRepository.save(new Student("John", "Doe", "jhondoe@gmail.com","password1"));
+        studentRepository.save(new Student("Jane", "Smith", "janesmith@gmail.com","password2"));
 
         // Déclaration et initialisation de SimpleDateFormat pour le format "dd-MM-yyyy"
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
