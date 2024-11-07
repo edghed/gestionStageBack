@@ -1,11 +1,12 @@
-// src/main/java/com/example/demo/dto/LoginRequest.java
+
 package com.example.demo.dto;
 
 public class LoginRequest {
     private String email;
     private String password;
 
-    public LoginRequest() {}
+    public LoginRequest() {
+    }
 
     public LoginRequest(String email, String password) {
         this.email = email;

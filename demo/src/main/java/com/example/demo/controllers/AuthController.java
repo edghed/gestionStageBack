@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Repositories.StudentRepository;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.LoginResponse;
 import com.example.demo.entities.Student;
+import com.example.demo.services.StudentService;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,29 +24,40 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class AuthController {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentService studentService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody Student student) {
-        if (studentRepository.findByEmail(student.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Cet email est déjà utilisé.");
-        }
+        /*
+         * if (studentService.loadUserByUsername(student.getEmail())) != null {
+         * return ResponseEntity.badRequest().body("Cet email est déjà utilisé.");
+         * }
+         */
         student.setPassword(passwordEncoder.encode(student.getPassword()));
-        studentRepository.save(student);
+        studentService.saveStudent(student);
         return ResponseEntity.ok("Inscription réussie !");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Student student = studentRepository.findByEmail(loginRequest.getEmail()).orElse(null);
-        if (student == null || !passwordEncoder.matches(loginRequest.getPassword(), student.getPassword())) {
+        System.out.println("Requête de connexion reçue pour : " + loginRequest.getEmail());
+
+        Student student = (Student) studentService.loadUserByUsername(loginRequest.getEmail());
+        if (student == null) {
+            System.out.println("Utilisateur non trouvé pour l'email : " + loginRequest.getEmail());
             return ResponseEntity.badRequest().body("Email ou mot de passe incorrect.");
         }
+
+        if (!passwordEncoder.matches(loginRequest.getPassword(), student.getPassword())) {
+            System.out.println("Mot de passe incorrect pour l'email : " + loginRequest.getEmail());
+            return ResponseEntity.badRequest().body("Email ou mot de passe incorrect.");
+        }
+
         String role = "STUDENT";
-        String secretKey = "votre_clé_secrète";
+        String secretKey = "az38";
         String token = Jwts.builder()
                 .setSubject(student.getEmail())
                 .claim("role", role)
@@ -54,6 +65,9 @@ public class AuthController {
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
+
+        System.out.println("Token généré : " + token);
         return ResponseEntity.ok(new LoginResponse(token, role));
     }
+
 }
