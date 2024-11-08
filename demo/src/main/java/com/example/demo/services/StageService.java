@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.Repositories.StageRepository;
 import com.example.demo.entities.Stage;
+import com.example.demo.repositories.StageRepository;
 
 @Service
 public class StageService {

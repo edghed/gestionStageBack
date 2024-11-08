@@ -7,13 +7,14 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Student implements UserDetails {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,19 +22,17 @@ public class Student implements UserDetails {
     private String firstName;
     private String lastName;
     private String email;
-    private String password; // Ajout du mot de passe
 
-    // Constructeurs
-    public Student() { }
+    public Student() {
+    }
 
-    public Student(String firstName, String lastName, String email, String password) {
+    public Student(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
+
     }
 
-    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -64,23 +63,5 @@ public class Student implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
     }
 }

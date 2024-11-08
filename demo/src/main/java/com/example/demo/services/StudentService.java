@@ -4,16 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.Repositories.StudentRepository;
 import com.example.demo.entities.Student;
+import com.example.demo.repositories.StudentRepository;
 
-@Service 
-public class StudentService implements UserDetailsService {
+@Service
+public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
@@ -48,11 +45,6 @@ public class StudentService implements UserDetailsService {
 
     public Optional<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email);
-       
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return studentRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Student not found with email: " + username));
-    }
 }

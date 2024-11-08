@@ -1,6 +1,8 @@
-package com.example.demo.jwt;
+package com.example.demo.security;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,12 +26,27 @@ public class JwtFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
     private String secretKey = "az38";
 
+    // URLs to exclude from the JWT filter
+    private static final List<String> EXCLUDED_URLS = Arrays.asList(
+            "/api/auth/register",
+            "/api/auth/login",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/**");
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        String authorizationHeader = request.getHeader("Authorization");
+        String requestURI = request.getRequestURI();
 
+        if (EXCLUDED_URLS.stream().anyMatch(requestURI::startsWith)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String authorizationHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
 
@@ -45,6 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 JwtAuthenticationToken authentication = new JwtAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
